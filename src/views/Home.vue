@@ -38,7 +38,7 @@ export default {
       initNum: 15, // ''的初始位置
       time: 0,
       timer: null,
-      randomTimes: 50, // 随机次数
+      randomTimes: 200, // 随机次数
     }
   },
   mounted() {
