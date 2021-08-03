@@ -67,6 +67,9 @@ export default {
 
       // 随机打乱
       this.randomArr()
+
+      // 点击"重新开始"按钮，重新计时
+      this.isFirstClick = true
     },
 
     // 计时
