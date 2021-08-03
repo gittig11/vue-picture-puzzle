@@ -39,6 +39,7 @@ export default {
       time: 0,
       timer: null,
       randomTimes: 200, // 随机次数
+      isFirstClick: true, // 第一次点击
     }
   },
   mounted() {
@@ -66,8 +67,10 @@ export default {
 
       // 随机打乱
       this.randomArr()
+    },
 
-      // 计时
+    // 计时
+    countFn() {
       this.timer = setInterval(() => {
         this.time += 1
       }, 1000)
@@ -105,6 +108,11 @@ export default {
         // console.log(num)
         this.changeByIndex(num)
         return
+      }
+      // 第一次点击后才开始计时
+      if (this.isFirstClick) {
+        this.isFirstClick = false
+        this.countFn()
       }
       if (e.target.nodeName.toLowerCase() === 'li') {
         const index = parseInt(e.target.dataset.index)
