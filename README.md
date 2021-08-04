@@ -1,4 +1,4 @@
-# vue-picture-puzzle
+# 一. vue-picture-puzzle
 
 ## 简介
 
@@ -17,6 +17,16 @@ eslint
 ## 项目预览
 
 ![拼图](./public/vue拼图小游戏.png) 
+
+
+# 二. canvas实现的拼图
+```
+预览地址:
+http://localhost:8080/#/puzzle
+
+参考:
+https://www.jb51.net/article/195855.htm
+```
 
 
 ## Project setup

@@ -21,6 +21,11 @@
 </template>
 
 <script>
+// canvas实现的拼图
+// http://localhost:8080/#/puzzle
+// 参考:
+// https://www.jb51.net/article/195855.htm
+
 export default {
   data() {
     return {
