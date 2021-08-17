@@ -19,6 +19,15 @@
 
     <p class="btn" @click="init">重新开始</p>
     <p> 耗时：{{time}} s </p>
+
+    <div class="selected-box">
+      <span>选择类型：</span>
+      <select v-model="boxLen" class="myselect">
+        <option v-for="(item, i) in options" :key="i" :value="item.value">
+          {{ item.text }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
@@ -33,6 +42,14 @@ export default {
   name: 'Home',
   data() {
     return {
+      options: [
+        { text: '3*3', value: 3 },
+        { text: '4*4', value: 4 },
+        { text: '5*5', value: 5 },
+        { text: '6*6', value: 6 }
+      ],
+
+      boxLen: 4, // 正方形拼图的边长
       picked: 0,
       puzzles: [],
       initNum: 15, // ''的初始位置
@@ -47,7 +64,7 @@ export default {
   },
   methods: {
     getNextNum(num) { // num: ''位置，如15
-      let increaseArr = [num + 4, num + 1, num - 1, num - 4]
+      let increaseArr = [num + this.boxLen, num + 1, num - 1, num - this.boxLen]
       let arr = increaseArr.filter(val => this.isIndexValid(val))
       let index = Math.floor(Math.random() * arr.length)
       this.initNum = arr[index]
@@ -58,10 +75,16 @@ export default {
     },
 
     isIndexValid(val) {
-      return val >= 0 && val < 16
+      return val >= 0 && val < this.boxLen ** 2
     },
 
     init() {
+      // 设置盒子宽度
+      let puzzleBox = document.querySelector('.puzzle-box')
+      puzzleBox.style.width = `${this.boxLen * 100}px`
+      // 更新 this.initNum
+      this.initNum = this.boxLen ** 2 - 1
+
       clearInterval(this.timer)
       this.time = 0
 
@@ -82,7 +105,7 @@ export default {
     randomArr() {
       // 初始化数组
       let arr = []
-      for (let index = 1; index < 16; index++) {
+      for (let index = 1; index < this.boxLen ** 2; index++) {
         arr.push(index)
       }
       arr.push('')
@@ -130,34 +153,34 @@ export default {
       let curNum = this.puzzles[index]
       let leftNum = this.puzzles[index - 1]
       let rightNum = this.puzzles[index + 1]
-      let topNum = this.puzzles[index - 4]
-      let bottomNum = this.puzzles[index + 4]
+      let topNum = this.puzzles[index - this.boxLen]
+      let bottomNum = this.puzzles[index + this.boxLen]
       if (curNum === '') {
         return
       }
       let num = this.puzzles.indexOf('')
       // console.log(curNum, leftNum, rightNum, topNum, bottomNum)
       // console.log(num)
-      if (!(num === index - 1 || num === index + 1 || num === index - 4 || num === index + 4)) {
+      if (!(num === index - 1 || num === index + 1 || num === index - this.boxLen || num === index + this.boxLen)) {
         // console.log("can't move.")
         return
       }
 
-      if (leftNum === '' && index % 4) { // index为8时，格子8和9不能交换
+      if (leftNum === '' && index % this.boxLen) { // index为8时，格子8和9不能交换
         this.swap(this.puzzles, index - 1, index, curNum, '')
-      } else if (rightNum === '' && index % 4 !== 3) { // index为7时，格子8和9不能交换
+      } else if (rightNum === '' && index % this.boxLen !== (this.boxLen - 1)) { // index为7时，格子8和9不能交换
         this.swap(this.puzzles, index + 1, index, curNum, '')
       } else if (topNum === '') {
-        this.swap(this.puzzles, index - 4, index, curNum, '')
+        this.swap(this.puzzles, index - this.boxLen, index, curNum, '')
       } else if (bottomNum === '') {
-        this.swap(this.puzzles, index + 4, index, curNum, '')
+        this.swap(this.puzzles, index + this.boxLen, index, curNum, '')
       }
       // console.log(this.puzzles)
     },
 
     check() {
-      if (this.puzzles[15] === '') {
-        const newPuzzles = this.puzzles.slice(0, 15)
+      if (this.puzzles[this.boxLen ** 2 - 1] === '') {
+        const newPuzzles = this.puzzles.slice(0, this.boxLen ** 2 - 1)
         const isPass = newPuzzles.every((val, i) => val === i + 1)
         if (isPass) {
           setTimeout(() => {
@@ -166,6 +189,11 @@ export default {
           }, 100)
         }
       }
+    },
+  },
+  watch: {
+    boxLen() {
+      this.init()
     },
   },
 }
@@ -227,6 +255,13 @@ export default {
       &:active{
         background-color: #96c6f4;
       }
+    }
+
+    .selected-box{
+      margin: 10px 0;
+    }
+    .myselect{
+      font-size: 16px;
     }
   }
 </style>
