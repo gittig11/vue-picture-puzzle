@@ -84,6 +84,7 @@ export default {
       puzzleBox.style.width = `${this.boxLen * 100}px`
       // 更新 this.initNum
       this.initNum = this.boxLen ** 2 - 1
+      this.randomTimes = 200 * (this.boxLen - 3) || 100 // 随机次数随着拼图的增大而增加，最小次数是100次
 
       clearInterval(this.timer)
       this.time = 0
