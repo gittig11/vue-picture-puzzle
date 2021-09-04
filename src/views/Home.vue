@@ -218,6 +218,7 @@ export default {
       margin: 0 auto;
       border: 2px solid #ccc;
       .puzzle{
+        user-select: none;
         width: 100px;
         height: 100px;
         border-radius: 5px;
